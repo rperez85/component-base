@@ -1,16 +1,19 @@
 # Component-base
+
 [TOCM]
 
 Ejemplo de uso de un componente base del que extienden las clases de es6 y cuya finalidad es aportar al desarrollador los recursos y características principales que poseen los frameworks modernos basados en componentes para desarollar aplicaciones complejas de una forma más sencilla.
 
 
 
-#####Instalación del ejemplo:
-`> git clone https://github.com/rperez85/component-base.git`
-`> npm install`
-`> npm run start:dev`
+##### Instalación del ejemplo:
+```toml
+> git clone https://github.com/rperez85/component-base.git
+> npm install
+> npm run start:dev
+```
 
-###Caracteristicas principales
+### Caracteristicas principales
 - Inmutabilidad de propiedades
 - Reactividad
 - Ciclo de vida de los componentes
@@ -26,16 +29,16 @@ Ejemplo de uso de un componente base del que extienden las clases de es6 y cuya 
 
 
 
-###Uso básico
+### Uso básico
 
 ```javascript
 //index.js:
 const app = new App({
-    id: 'app-example', //no es obligatorio, si no lo pones se crea un data-id dinámico
-	destiny: '#root',
-	data: {
-		message: 'Hola Mundo!'
-	}, 
+  id: 'app-example', //no es obligatorio, si no lo pones se crea un data-id dinámico
+  destiny: '#root',
+  data: {
+    message: 'Hola Mundo!'
+  }, 
 });
 app.render();
 ```
@@ -59,7 +62,7 @@ export class App extends Component {
 
 
 
-###Reactividad
+### Reactividad
 Al cambiar o añadir alguna propiedad nueva al data, el componente se renderiza automáticamente:
 ```javascript
 //...
@@ -80,7 +83,7 @@ app.addData({
 ------------
 
 
-###Uso de lógica en el template
+### Uso de lógica en el template
 Gracias a la función 'html' y al uso de los 'Template Strings' de es6, podemos añadir lógica a los templates: bucles, condicionales...
 
 ```javascript
@@ -98,7 +101,7 @@ get template() {
 ------------
 
 
-###Métodos nativos de los componentes
+### Métodos nativos de los componentes
 Por el momento sólo existen estos tres: onClick, onMouseOver y onKeyPress. Aunque en un futuro se podrán añadir los que sean necesarios.
 ```javascript
 //index.js:
@@ -127,7 +130,7 @@ app.render();
 ------------
 
 
-###Ciclo de vida de los componentes
+### Ciclo de vida de los componentes
 A través del ciclo de vida de los componentes puedes manejar su comportamiento en un momento preciso. Este ciclo de vida se puede manejar tanto desde la instancia del componente (llamado a traves del props), como dentro de la propia clase de dicho componente:
 
 ```javascript
@@ -159,9 +162,9 @@ app.render();
 ```javascript
 //app.js:
 export class App extends Component {
-    constructor(props) {
-        super(props);
-    }
+  constructor(props) {
+    super(props);
+  }
 	
 	beforeRender() {
 	}
@@ -175,17 +178,17 @@ export class App extends Component {
 	removeComponent(){	
 	}
 	
-    get template() { 
-        return html`
-            <p>${message}</p>`;
-    }
+  get template() { 
+    return html`
+      <p>${message}</p>`;
+  }
 }
 ```
 
 ------------
 
 
-###Composicion de componentes anidados
+### Composicion de componentes anidados
 El motivo principal del uso de un sistema del componentes es desarrollar aplicaciones complejas donde se pueda llamar fácilmente a un componente dentro de otro a traves del render y que sus propios eventos se transmitan desde el hijo hasta el padre para poder ser manejados en la vista:
 
 **En el siguiente ejemplo vamos a construir una tabla dinámica donde al hacer click en cada una de las columnas nos devuelva el texto que contiene:
@@ -297,7 +300,7 @@ export class Column extends Component {
 ------------
 
 
-###Registro de estados de los componentes
+### Registro de estados de los componentes
 Es posible registrar uno o varios estados de los componente y que además puedan mutar de hijo a padre manteniéndose visibles desde cualquier lugar de la aplicación. Además, desde la vista se dispara el evento 'updateState' cada vez que algún componente cambia de estado. 
 
 ```javascript
@@ -321,7 +324,7 @@ updateState: (state) => {
 ------------
 
 
-###Estilos independientes por componente
+### Estilos independientes por componente
 A través de la propiedad 'inlineCss' podemos customizar el estilo del componente en cuestión añadiendole clases css a través de estilos en línea.
 
 ```javascript
