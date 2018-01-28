@@ -27,16 +27,12 @@ describe('ComponentBase Spec', () => {
     });
 
    
-
     it('reactividad: al cambiar una propiedad del data se renderiza de nuevo el componente', function () {
         spyOn(component, 'render');
         component.addData({});
         expect(component.render).toHaveBeenCalled();
     });
 
-    //it('propagación de eventos de hijos a padre', function () {
-        
-    //});
 
     it('change data event: tras cambiar una propiedad del data se llama al método "updateData"', function () {       
         spyOn(component, 'updateData');
@@ -84,7 +80,9 @@ describe('ComponentBase Spec', () => {
         expect($(`[data-component-id="${component.props.id}"]`).attr('style') != 'undefined' && $(`[data-component-id="${component.props.id}"]`).attr('style') != '').toBe(true);
     });
 
-    //it('stateComponent...', function () {
-        
-    //});
+    it('componentState: tras cambiar el estado del componente se llama al método "updateState"', function () {       
+        spyOn(component, 'updateState');
+        component.componentState = {}
+        expect(component.updateData).toHaveBeenCalled();
+    });
 });

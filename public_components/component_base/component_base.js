@@ -16,7 +16,8 @@ export class Component {
             inlineCss: props.inlineCss || {},
             methods: {
                 onClick: props.methods && props.methods.onClick ? props.methods.onClick : function() {},
-                onMouseOver: props.methods && props.methods.onMouseOver ? props.methods.onMouseOver : function() {}
+                onMouseOver: props.methods && props.methods.onMouseOver ? props.methods.onMouseOver : function() {},
+                onKeyPress: props.methods && props.methods.onKeyPress ? props.methods.onKeyPress : function() {}
             }            
         });
            
@@ -101,6 +102,7 @@ export class Component {
     _nativeMethods() {              
         $(this.$el).on('click', (ev) => this.props.methods.onClick(ev, this._data));
         $(this.$el).on('mouseover', (ev) => this.props.methods.onMouseOver(ev, this._data));
+        $(this.$el).on('keypress', (ev) => this.props.methods.onKeyPress(ev, this._data));
     }
 
     _applyInlineCss() {        
