@@ -7,10 +7,10 @@ Ejemplo de uso de un componente base del que extienden las clases de es6 y cuya 
 
 
 ##### Instalación del ejemplo:
-```toml
-> git clone https://github.com/rperez85/component-base.git
-> npm install
-> npm run start:dev
+```javascript
+ > git clone https://github.com/rperez85/component-base.git
+ > npm install
+ > npm run start:dev
 ```
 
 ### Caracteristicas principales
@@ -46,9 +46,9 @@ app.render();
 ```javascript
 //app.js:
 export class App extends Component {
-	constructor(props) {
-		super(props);
-    }
+constructor(props) {
+	super(props);
+}
 	
 	get template() { 
 		return html`
@@ -115,7 +115,7 @@ const app = new App({
 		'onClick': (e, data) => {
 			console.log(`component clicked: ${data}`);
 		 },
-		'onMouseOver': (e, data) => {
+  'onMouseOver': (e, data) => {
 			console.log(`mouse over component: ${data}`);
 		 },
 		'onKeyPress': (e, data) => {
