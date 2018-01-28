@@ -1,5 +1,4 @@
-﻿
-const NAME = 'Component';
+﻿const NAME = 'Component';
 const VERSION = '1.0.0';
 
 export class Component {
@@ -43,10 +42,6 @@ export class Component {
         if (doRender) {
             this.render();  
         }
-    }
-
-    get method() {
-        return
     }
 
     get destiny() {

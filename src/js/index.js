@@ -65,24 +65,25 @@ $(() => {
         }        
     });
      
-    menu.on('newButtonAdded', (btn) => {
-        console.log('nuevo botón añadido: ' + btn); 
+    menu.on('newButtonAdded', (item) => {
+        console.log(`item added ${btn}`); 
     });
     
     menu.render();
 
+    //example of data update:
     setTimeout(() => {
         menu.addData({
             'buttons': [{
-                'text': 'boton 1',
+                'text': 'item 4',
                 'href': '#',
                 'subItems':  []
             },
             {
-                'text': 'boton 3',
+                'text': 'item 5',
                 'href': '#',
                 'subItems':  [{
-                    'text': 'subboton 1',
+                    'text': 'subitem 1',
                     'href': '#'
                 }]
             }]
