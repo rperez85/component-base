@@ -288,7 +288,9 @@ export class Row extends Component {
                 ${ this.data.row.map(column => html`
                     new Column({
                         data: {
-                            'column': column
+                            'name': column.name,
+			    'surname': column.surname,
+			    'style': column.style
                         },
                         methods: {
                             'onClick': (e, data) => {
@@ -312,7 +314,9 @@ export class Column extends Component {
 
     get template() {        
         return html`
-            <li>${this.data.column}</li>`;
+            <li>${this.data.name}</li>`;
+	    <li>${this.data.surname}</li>`;
+	    <li>${this.data.style}</li>`;
         
     }
 }
