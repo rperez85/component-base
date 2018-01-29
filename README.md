@@ -184,7 +184,7 @@ removeComponent(){
 
 get template() { 
     return html`
-        <p>${message}</p>`;
+        <p>${this.data.message}</p>`;
     }
 }
 ```
@@ -193,7 +193,7 @@ get template() {
 
 
 ## Composicion de componentes anidados
-El motivo principal del uso de un sistema del componentes es el desarrollo de aplicaciones complejas donde se puedan renderizar componentes dentro de otros componentes y que, de igual modo, sus propios eventos se transmitan desde los hijos para poder ser manejados en la vista:
+El motivo principal del uso de un sistema del componentes es el desarrollo de aplicaciones complejas donde se puedan renderizar componentes dentro de otros componentes y que, de igual modo, sus propios eventos se transmitan desde los hijos para poder ser manejados desde la vista si se requiriese:
 
 **En el siguiente ejemplo vamos a construir una tabla dinámica donde al hacer click en cada una de las columnas nos devuelva el texto que contiene:
 
