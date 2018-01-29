@@ -255,13 +255,13 @@ export class Table extends Component {
         return html`
             <div class="table">
                 ${ this.data.list.map(row => html`
-                    new Row({
+                    $${new Row({
                         data: {
                            'row': row
                         }
                     }).on('columnClicked', (data) => {
                         this.trigger('columnTableClicked', data);
-                    }).render()`
+                    }).render()}`
                 )} 
             </div>`;
         }
@@ -286,7 +286,7 @@ export class Row extends Component {
         return html`
             <ul>
                 ${ Object.values(row).map(column => html`
-                    new Column({
+                    $${new Column({
                         data: {
                             'column': column
                         },
@@ -295,7 +295,7 @@ export class Row extends Component {
                                 this.trigger('columnClicked', data);
                              }
                         }
-                    }).render()`
+                    }).render()}`
                 )} 
             </ul>`;
     }
