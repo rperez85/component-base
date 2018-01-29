@@ -32,6 +32,8 @@ Ejemplo de uso de un componente base del que extienden las clases de es6 y cuya 
 ```javascript
 //index.js:
 
+import { App } from './app.js';
+
 const app = new App({
     id: 'app-example', //no es obligatorio, si no lo pones se crea un data-id dinámico
     destiny: '#root',
@@ -69,6 +71,7 @@ Al cambiar o añadir alguna propiedad nueva al data, el componente se renderiza 
 app.addData({
     message: 'Hola de nuevo!'
 });
+//...
 ```
 
 Por defecto la función reactiva está activada, pero si se quisiera desactivar (para uso asíncrono, peticiones ajax...), sólo habría que setear el último parámetro a *false*:
@@ -77,6 +80,7 @@ Por defecto la función reactiva está activada, pero si se quisiera desactivar 
 app.addData({
     message: 'Hola de nuevo!'
 }, false);
+//...
 ```
 
 
@@ -136,6 +140,8 @@ A través del ciclo de vida de los componentes puedes manejar su comportamiento 
 
 ```javascript
 //index.js:
+
+import { App } from './app.js';
 
 const app = new App({
     id: 'app-example',
@@ -200,6 +206,8 @@ El motivo principal del uso de un sistema del componentes es el desarrollo de ap
 ```javascript
 //index.js
 
+import { Table } from './table.js';
+
 const table = new Table({
     id: 'component-table',
     destiny: '#root',
@@ -232,6 +240,8 @@ table.render();
 ```javascript
 //table.js
 
+import { Row } from './row.js';
+
 export class Table extends Component {
     constructor(props) {
         super(props);
@@ -260,6 +270,8 @@ export class Table extends Component {
 
 ```javascript
 //row.js
+
+import { Column } from './column.js';
 
 export class Row extends Component {
     constructor(props) {
