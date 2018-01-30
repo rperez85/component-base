@@ -299,7 +299,7 @@ export class Row extends Component {
     get template() {        
         return html`
             <ul>
-                ${ Object.values(row).map(column => html`
+                ${ Object.values(data.row).map(column => html`
                     $${new Column({
                         data: {
                             'column': column
@@ -326,7 +326,7 @@ export class Column extends Component {
 
     get template() {        
         return html`
-	    <li>${column}</li>`;     
+	    <li>${data.column}</li>`;     
     }
 }
 ```
@@ -361,7 +361,7 @@ updateState: (state) => {
 
 
 ## Estilos independientes por componente
-A través de la propiedad 'inlineCss' cabría la posibilidad de customizar el estilo del componente añadiendole clases css a través de estilos en línea.
+A través de la propiedad 'inlineCss' es posible customizar el estilo del componente añadiendole clases css a través de estilos en línea.
 
 ```javascript
 //component.js
