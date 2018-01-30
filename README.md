@@ -85,7 +85,7 @@ app.addData({
 //...
 ```
 
-**Si los datos que alimentan ese componente son servidos desde el mismo, simplemente lanzaríamos el método 'remove()'.
+**Si los datos que alimentan ese componente son servidos desde éste, simplemente lanzaríamos el método 'remove()'.
 
 
 #### Modificación de data: 
@@ -94,7 +94,7 @@ Sigue la misma lógica que el borrado del data, pero pasándole la función 'upd
 ```javascript
 //...
 app.addData({
-    'listaDeDatos': array.updateFromArray(this.data.listaDeDatos, datoABModificar, datoModificado)
+    'listaDeDatos': array.updateFromArray(this.data.listaDeDatos, datoAModificar, datoModificado)
 });
 //...
 ```
@@ -114,7 +114,7 @@ get template() {
         </ul>`;
 }
 ```
-**Por otro lado, si se desea también es posible importar cualquier framework de templates tipo handlebars, t.js, ...
+**Por otro lado, si se desea, también es posible importar cualquier framework de templates tipo handlebars, t.js, ...
 
 
 
