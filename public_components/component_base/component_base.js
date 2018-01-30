@@ -79,8 +79,8 @@ export class Component {
     remove() {                
         this._data = {};        
         this.$el.remove();        
-        this.props.removeComponent(this._data, hasBeenRemovedFromData);
-        this.removeComponent(this._data, hasBeenRemovedFromData);  
+        this.props.removeComponent(this._data);
+        this.removeComponent(this._data);  
     }
 
     _nativeMethods() {              
