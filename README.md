@@ -75,7 +75,7 @@ app.addData({
 ```
 
 #### Borrado de data: 
-Cuando se trata de un array, en ciertas ocasiones para borrar el data de un componente debemos acceder al padre y eliminarlo desde ahí volviendo a lanzar el método 'addData' y pasándole la función 'removeFromArray'. Esto es así porque los datos del componente a borrar son servidor desde el padre y dicho data necesita actualizarse. 
+Cuando se trata de un array, en ciertas ocasiones para borrar el data de un componente debemos acceder al padre y eliminarlo desde ahí volviendo a lanzar el método 'addData' y pasándole la función 'removeFromArray'. Esto es así porque los datos del componente a borrar son servidor desde el padre y el data de éste necesita actualizarse. 
 
 ```javascript
 //...
