@@ -77,10 +77,12 @@ export class Component {
     }
 
     remove() {                
+        const removedData = this._data;
+
         this._data = {};        
         this.$el.remove();        
-        this.props.removeComponent(this._data);
-        this.removeComponent(this._data);  
+        this.props.removeComponent(removedData, this._data);
+        this.removeComponent(removedData, this._data);  
     }
 
     _nativeMethods() {              
@@ -98,7 +100,6 @@ export class Component {
     }
 
     _delegateEventsAfterRender() {
-
         if (!this.$el.length) {
             return;
         }
