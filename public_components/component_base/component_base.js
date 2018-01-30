@@ -111,7 +111,7 @@ export class Component {
         this.props.afterRender(this._data);
     }
 
-    _checkIfDestinyExists() {
+    _checkIfDestinyExistsInDom() {
         if (this.$destiny.length === 0) {
             throw Error(`destiny ${this._destiny} for component ${this.props.id} doesn´t exist in dom.`);            
         }
@@ -139,7 +139,7 @@ export class Component {
         this._checkIfTemplateExists();
         
         if (this._destiny) {            
-            this._checkIfDestinyExists();
+            this._checkIfDestinyExistsInDom();
             this.$destiny.html(`<div data-component-id="${this.props.id}">${this.template}</div>`); 
             this._delegateEventsAfterRender();              
             resolveAppendComponent();            
