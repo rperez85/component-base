@@ -150,7 +150,7 @@ app.render();
 
 
 ## Ciclo de vida de los componentes
-A través del ciclo de vida de los componentes puedes manejar su comportamiento en un momento preciso. Este ciclo de vida se puede manejar tanto desde la instancia del componente (llamado a traves del props), como dentro de la propia clase de dicho componente:
+A través del ciclo de vida de los componentes puedes manejar su comportamiento en un momento preciso. Este ciclo de vida se puede manejar tanto desde la instancia del componente (llamado a través del props), como dentro de la propia clase de dicho componente:
 
 ```javascript
 //index.js:
