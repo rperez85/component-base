@@ -1,4 +1,4 @@
-﻿import { Component } from './component_base.js';
+import { Component } from './component-base.js';
 
 describe('ComponentBase Spec', () => {   
     let component;
@@ -27,10 +27,10 @@ describe('ComponentBase Spec', () => {
     });
 
    
-    it('reactividad: al cambiar una propiedad del data se renderiza de nuevo el componente', function () {
-        spyOn(component, 'render');
+    it('reactividad: al cambiar una propiedad del data se re-delegan los eventos', function () {
+        spyOn(component, '_delegateEventsAfterRender');
         component.addData({});
-        expect(component.render).toHaveBeenCalled();
+        expect(component._delegateEventsAfterRender).toHaveBeenCalled();
     });
 
 
@@ -57,10 +57,9 @@ describe('ComponentBase Spec', () => {
         expect(component.removeComponent).toHaveBeenCalled();
     });
 
-    it('remove component: tras borrar un componente si existe "destiny" se llama al método "render" para actualizar el componente', function () {
-        spyOn(component, 'render');
+    it('remove component: tras borrar un componente se resetea el data', function () {        
         component.remove();
-        expect(component.render).toHaveBeenCalled();
+        expect($.isEmptyObject(component._data)).toBe(true);
     });
 
     it('native methods: tras renderizar un componente se delegan los métodos nativos de éste', function () {
