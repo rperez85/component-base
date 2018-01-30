@@ -74,16 +74,30 @@ app.addData({
 //...
 ```
 
-Por defecto la función reactiva está activada, pero si se quisiera desactivar (para uso asíncrono, peticiones ajax...), sólo habría que setear el último parámetro a *false*:
+#### Borrado de data: 
+Cuando se trata de un array, en ciertas ocasiones para borrar el data de un componente debemos acceder al padre y eliminarlo desde ahí volviendo a lanzar el método 'addData' y pasándole la función 'removeFromArray'. Esto es así porque los datos del componente a borrar son servidor desde el padre y dicho data necesita actualizarse. 
+
 ```javascript
 //...
 app.addData({
-    message: 'Hola de nuevo!'
-}, false);
+    'listaDeDatos': array.removeFromArray(this.data.listaDeDatos, datoABorrar)
+});
 //...
 ```
 
+**Si los datos que alimentan ese componente son servidos desde el mismo, simplemente lanzaríamos el método 'remove()'.
 
+
+#### Modificación de data: 
+Sigue la misma lógica que el borrado del data, pero pasándole la función 'updateFromArray' con tres parámetros: 
+
+```javascript
+//...
+app.addData({
+    'listaDeDatos': array.updateFromArray(this.data.listaDeDatos, datoABModificar, datoModificado)
+});
+//...
+```
 
 
 
