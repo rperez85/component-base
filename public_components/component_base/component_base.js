@@ -1,4 +1,4 @@
-﻿const NAME = 'Component';
+const NAME = 'Component';
 const VERSION = '1.0.0';
 
 export class Component {
@@ -33,15 +33,12 @@ export class Component {
         return this._data;
     }
 
-    addData(data, doRender = true) {              
-        this._data = Object.assign({}, this._data, data);                   
+    addData(data) {              
+        this._data = Object.assign({}, this._data, data); 
+        this.$el.replaceWith(`<div data-component-id="${this.props.id}">${this.template}</div>`);
+        this._delegateEventsAfterRender();  
         this.updateData(this._data);
         this.props.updateData(this._data);
-
-        //for do that reactive, when data is updated call render again.
-        if (doRender) {
-            this.render();  
-        }
     }
 
     get destiny() {
@@ -79,17 +76,9 @@ export class Component {
         return $(`[data-component-id="${this.props.id}"]`);
     }
 
-    remove() {        
-        let hasBeenRemovedFromData = false;
-
-        if (this._destiny) {
-            this._data = {};
-            this.render();  
-            hasBeenRemovedFromData = true;
-        } else {
-            console.warn('you have removed a component: don´t forget to remove the data into the parent of the removed component child.');
-        }
-        
+    remove() {                
+        this._data = {};        
+        this.$el.remove();        
         this.props.removeComponent(this._data, hasBeenRemovedFromData);
         this.removeComponent(this._data, hasBeenRemovedFromData);  
     }
@@ -145,19 +134,13 @@ export class Component {
 
     updateState() {}
   
-    render() {          
+    render() {     
         this._checkIfTemplateExists();
         
         if (this._destiny) {            
             this._checkIfDestinyExists();
-
-            if (!this.$el.length) {
-                this.$destiny.append(`<div data-component-id="${this.props.id}">${this.template}</div>`);  
-            } else {
-                this.$el.replaceWith(`<div data-component-id="${this.props.id}">${this.template}</div>`);
-            }         
-            this._delegateEventsAfterRender();  
-            
+            this.$destiny.html(`<div data-component-id="${this.props.id}">${this.template}</div>`); 
+            this._delegateEventsAfterRender();              
             resolveAppendComponent();            
             
             return;
