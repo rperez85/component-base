@@ -55,7 +55,7 @@ export class App extends Component {
 get template() { 
     return html`
       <p>${this.data.message}</p>`;
-	  }
+    }
 }
 ```
 
