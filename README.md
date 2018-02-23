@@ -378,7 +378,7 @@ this.inlineCss = {
 
 
 ## Binding de datos de un componente desde cualquier parte de la aplicación
-Desde cualquier componente se pueden guardar datos en un store y despacharlos desde otro componente de la misma aplicación.
+Desde un componente se pueden guardar datos en un store y despacharlos desde cualquier otro componente de la misma aplicación que esté escuchando.
 
 ```javascript
 //component.js
