@@ -351,7 +351,7 @@ this.componentState = {
 //index.js
 
 //...
-updateState: (state) => {
+updateState: (state, self) => {
     console.log(`state has been updated!: ${JSON.stringify(state)}`);
 }
 //...
@@ -395,7 +395,9 @@ const app = new App({
     data: {
         message: 'Hola Mundo!'
     }, 
-    emittedModelDataBinding: (data) => {
+    emittedModelDataBinding: (data, self, from) => {
+        //self => componente que escucha
+	//from => componente desde el que se emiten los datos
         console.log(data.total); //10
     }
 });
