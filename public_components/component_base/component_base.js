@@ -1,7 +1,7 @@
 const NAME = 'Component';
 const VERSION = '1.0.0';
 
-export class Component {
+export class Component {    
     constructor(props) {                
         this.props = Object.freeze({
             destiny: props.destiny,
@@ -9,6 +9,7 @@ export class Component {
             id: props.id || generateUniqueId(),
             updateData: props.updateData || function() {},
             updateState: props.updateState || function() {},
+            emittedModelDataBinding: props.emittedModelDataBinding || function() {}, 
             beforeRender: props.beforeRender || function() {},
             afterRender: props.afterRender || function() {},
             removeComponent: props.removeComponent || function() {},
@@ -20,27 +21,29 @@ export class Component {
             }            
         });
            
-        this._data = Object.assign({}, this.props.data, {});  
+        this._data = Object.assign({}, this.props.data, {});         
         this._state = {};
+        this._modelDataBinding = {};
         this._destiny = this.props.destiny;        
         this._inlineCss = this.props.inlineCss;    
+        this._addComponentEmittedModelDataBinding(this.props.emittedModelDataBinding, componentsWithModelDataBinding);
         
-        this.props.beforeRender();
-        this.beforeRender();        
+        this.props.beforeRender(this);
+        this.beforeRender(this);  
     }
 
     get data() {
         return this._data;
     }
-
+  
     addData(data) {              
         this._data = Object.assign({}, this._data, data); 
         this.$el.replaceWith(`<div data-component-id="${this.props.id}">${this.template}</div>`);
         this._delegateEventsAfterRender();  
-        this.updateData(this._data);
-        this.props.updateData(this._data);
+        this.updateData(this._data, this);
+        this.props.updateData(this._data, this);
     }
-
+	
     get destiny() {
         return this._destiny;
     }
@@ -60,8 +63,22 @@ export class Component {
     set componentState(state) {//saves states of component from child to parent
         this._state = Object.assign({}, state, this._state);
         componentState = Object.assign(this._state, componentState, state);
-        this.updateState(componentState);
-        this.props.updateState(componentState);
+        this.updateState(componentState, this);
+        this.props.updateState(componentState, this);
+    }
+
+    get modelDataBinding() {
+        return this._modelDataBinding;
+    }
+
+
+    set modelDataBinding(data) {        
+        this._modelDataBinding = Object.assign({}, this._modelDataBinding, data); 
+
+        for (const component of componentsWithModelDataBinding) {
+            component.props.emittedModelDataBinding(this._modelDataBinding, component, this);
+            component.emittedModelDataBinding(this._modelDataBinding, component, this);
+        }        
     }
 
     get $destiny() {
@@ -81,8 +98,18 @@ export class Component {
 
         this._data = {};        
         this.$el.remove();        
-        this.props.removeComponent(removedData, this._data);
-        this.removeComponent(removedData, this._data);  
+        this.props.removeComponent(removedData, this._data, this);
+        this.removeComponent(removedData, this._data, this);  
+    }
+
+    _addComponentEmittedModelDataBinding(component, arrDataBindingComponents) {
+        Function.prototype.getName = function(){           
+            return /function ([^(]*)/.exec( this+"" )[1];
+        };
+
+        if (component.getName() === 'emittedModelDataBinding') {
+            arrDataBindingComponents.push(this);            
+        }
     }
 
     _nativeMethods() {              
@@ -107,8 +134,8 @@ export class Component {
         this._applyInlineCss();
         this._nativeMethods();    
         this.events();        
-        this.afterRender(this._data);
-        this.props.afterRender(this._data);
+        this.afterRender(this._data, this);
+        this.props.afterRender(this._data, this);   
     }
 
     _checkIfDestinyExistsInDom() {
@@ -134,6 +161,8 @@ export class Component {
     updateData() {}
 
     updateState() {}
+
+    emittedModelDataBinding() {}
   
     render() {     
         this._checkIfTemplateExists();
@@ -153,12 +182,7 @@ export class Component {
     }
 }
 
-
-let resolveAppendComponent, componentState = {}; 
-
-let generateUniqueId = () => {
-    return `cmp_${Math.random().toString(36).slice(2)}gid`;
-}
+let resolveAppendComponent, componentState = {}, componentsWithModelDataBinding = [], generateUniqueId = () => `cmp_${Math.random().toString(36).slice(2)}gid`;
 
 const promiseAppendComponent = new Promise(_resolve => {
     resolveAppendComponent = _resolve;
