@@ -377,6 +377,34 @@ this.inlineCss = {
 
 
 
+## Binding de datos de un componente desde cualquier parte de la aplicación
+Desde cualquier componente se pueden guardar datos en un store y despacharlos desde otro componente de la misma aplicación.
+
+```javascript
+//component.js
+
+//...
+this.modelDataBinding = {'total': 10};
+//...
+```
+
+```javascript
+//index.js:
+
+const app = new App({    
+    data: {
+        message: 'Hola Mundo!'
+    }, 
+    emittedModelDataBinding: (data) => {
+        console.log(data.total); //10
+    }
+});
+app.render();
+```
+
+
+
+
 
 
 
