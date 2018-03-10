@@ -76,9 +76,9 @@ export class ButtonMenu extends Component {
                         'onClick': () => console.log('dropdownMenu clicked')
                     }
                 }).render();
-            } else {
-                return '';
-            }
+            } 
+            
+            return '';
         };
 
         return html`        
