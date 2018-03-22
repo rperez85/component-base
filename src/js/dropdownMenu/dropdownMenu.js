@@ -1,5 +1,5 @@
 ﻿import html from '../../../utils/es6-template';
-import { Component } from '../../../public_components/component_base/component_base.js';
+import { Component } from '../../../public_components/component-base/component-base.js';
 
 const NAME = 'DropdownMenu';
 const VERSION = '1.0.0';
