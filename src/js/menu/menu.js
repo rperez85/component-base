@@ -1,7 +1,7 @@
-﻿import html from '../../../utils/es6-template';
+import html from '../../../utils/es6-template';
 import makeObservable from '../../../utils/makeObservable';
 import * as array from '../../../utils/array';
-import { Component } from '../../../public_components/component_base/component_base.js';
+import { Component } from '../../../public_components/component-base/component-base.js';
 import { ButtonMenu } from '../buttonMenu/buttonMenu.js';
 
 const NAME = 'Menu';
@@ -56,8 +56,25 @@ export class Menu extends Component {
             this.addData({
                 'buttons': arrButtons
             });
+
+            this.modelDataBinding = {
+                'text': 'nuevo item!'
+            };
+
+            setTimeout(() => {
+                this.modelDataBinding = {
+                    'text': ''
+                };
+            }, 2000);
            
             this.trigger('newButtonAdded', newButton);
+        });
+
+
+        $(this.$el).find(`#${IDS.buttonText}`).on('keyup', (e) => {
+            this.modelDataBinding = {
+                'text': $(e.currentTarget).val().length ? 'escribiendo...' : ''
+            };
         });
     }
 
@@ -66,14 +83,13 @@ export class Menu extends Component {
     }
 
     beforeRender() {//native component method
-        this.addData({
-            'completeName': `Ejemplo de componente ${this.data.name}` 
-        }, false);
+        
 
     }
 
     afterRender() {//native component method
-        //console.log('menu just rendered');
+        console.log('menu just rendered');
+
     }
 
     updateData() {//native component method        
@@ -84,22 +100,23 @@ export class Menu extends Component {
 
 
     get template() {        
-        return html`
+        return html`<div>
             <h1>${this.data.completeName}</h1>
             <input type="text" id=${IDS.buttonText} />
-            <input type="button" id=${IDS.addButton} value="añade nuevo item" />
+            <input type="button" id=${IDS.addButton} data-value="añade nuevo item" />
             <div id="menu">
                 <ul>
-                    ${ this.data.buttons ? this.data.buttons.map(button => html`
+                    ${ this.data.buttons ? this.data.buttons.map((button, i) => html`
                         <li>
                             $${new ButtonMenu({
+                                id: 'btn' + i,
                                 data: {
                                     'text': button.text,
                                     'href':  button.href,
                                     'subItems': button.subItems ? button.subItems : ''
                                 },
-                                removeComponent: (data) => {                                    
-                                    //when the element is deleted, the data must be updated:                                   
+                                removeComponent: (data) => {    
+                                console.log(this.data.buttons, data);                                                                 
                                     this.addData({
                                         'buttons': array.removeFromArray(this.data.buttons, data)
                                     });                                                                             
@@ -118,6 +135,7 @@ export class Menu extends Component {
                         </li>`
                      ) : ''}                    
                 </ul>
-            </div>`;
+            </div>
+        </div>`;
     }
 }
