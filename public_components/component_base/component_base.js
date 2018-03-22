@@ -1,7 +1,9 @@
+import * as vdom from './virtual-dom.js';
+
 const NAME = 'Component';
 const VERSION = '1.0.0';
 
-export class Component {    
+export class Component {
     constructor(props) {                
         this.props = Object.freeze({
             destiny: props.destiny,
@@ -38,12 +40,15 @@ export class Component {
   
     addData(data) {              
         this._data = Object.assign({}, this._data, data); 
-        this.$el.replaceWith(`<div data-component-id="${this.props.id}">${this.template}</div>`);
+        vdom.updateElement(document.querySelector('[data-component-id="' + this.props.id + '"]'), vdom.convertToVdom(this.template), vdom.convertToVdom(document.querySelector('[data-component-id="' + this.props.id + '"]').innerHTML));
+        this.$el.off();
+        this.$el.find("*").off();
         this._delegateEventsAfterRender();  
         this.updateData(this._data, this);
         this.props.updateData(this._data, this);
     }
 	
+
     get destiny() {
         return this._destiny;
     }
@@ -71,7 +76,6 @@ export class Component {
         return this._modelDataBinding;
     }
 
-
     set modelDataBinding(data) {        
         this._modelDataBinding = Object.assign({}, this._modelDataBinding, data); 
 
@@ -95,7 +99,7 @@ export class Component {
 
     remove() {                
         const removedData = this._data;
-
+	    
         this._data = {};        
         this.$el.remove();        
         this.props.removeComponent(removedData, this._data, this);
@@ -168,8 +172,9 @@ export class Component {
         this._checkIfTemplateExists();
         
         if (this._destiny) {            
-            this._checkIfDestinyExistsInDom();
-            this.$destiny.html(`<div data-component-id="${this.props.id}">${this.template}</div>`); 
+            this._checkIfDestinyExistsInDom();            
+            this.$destiny.html(`<div data-component-id="${this.props.id}"></div>`);
+            vdom.updateElement(document.querySelector('[data-component-id="' + this.props.id + '"]'), vdom.convertToVdom(`${this.template}`));
             this._delegateEventsAfterRender();              
             resolveAppendComponent();            
             
