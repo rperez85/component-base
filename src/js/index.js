@@ -1,4 +1,4 @@
-﻿import "babel-polyfill";
+import "babel-polyfill";
 import { Menu } from './menu/menu.js';
 
 
@@ -46,27 +46,30 @@ $(() => {
             }]
         },
         beforeRender: () => {
-            console.log('component before rendered');
+            //console.log('component before rendered');
         },
         afterRender: (data) => {         
         },
         updateData: (data) => {
-            console.log(`data has been updated!: ${JSON.stringify(data)}`);      
+           console.log(`data has been updated!: ${JSON.stringify(data)}`);      
         },
         updateState: (state) => {
             console.log(`state has been updated!: ${JSON.stringify(state)}`);
         },
         removeComponent: (data) => {            
-        },        
+        },  
+        emittedModelDataBinding: (data, self, component) => {
+            $('#stateWritting').text(data.text);
+        },
         methods: {
             'onClick': (e, data) => {
-                console.log(data);//click all component content
+               console.log(data);//click all component content
             }
         }        
     });
      
     menu.on('newButtonAdded', (item) => {
-        console.log(`item added ${btn}`); 
+        console.log(`item added ${item}`); 
     });
     
     menu.render();
