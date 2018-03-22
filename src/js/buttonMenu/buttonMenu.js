@@ -1,6 +1,6 @@
-﻿import html from '../../../utils/es6-template';
+import html from '../../../utils/es6-template';
 import makeObservable from '../../../utils/makeObservable';
-import { Component } from '../../../public_components/component_base/component_base.js';
+import { Component } from '../../../public_components/component-base/component-base.js';
 import { DropdownMenu } from '../dropdownMenu/dropdownMenu.js';
 
 const NAME = 'ButtonMenu';
@@ -40,10 +40,31 @@ export class ButtonMenu extends Component {
         });
 
         $(this.$el).find(`.${CLASSES.removeButton}`).on('click', (e) => {     
+            
+            this.modelDataBinding = {
+                'text': `item ${this.data.text} borrado`
+            };
+
+           
+            setTimeout(() => {
+                this.modelDataBinding = {
+                    'text': ''
+                };
+            }, 2000);
+
             this.remove();
         });
 
-        $(this.$el).find(`.${CLASSES.updateButton}`).on('click', (e) => {                
+        $(this.$el).find(`.${CLASSES.updateButton}`).on('click', (e) => { 
+            this.modelDataBinding = {
+                'text': $(this.$el).find(`.${CLASSES.updateText}`).val().length ? `item ${this.data.text} modificado` : ''
+            };
+            setTimeout(() => {
+                this.modelDataBinding = {
+                    'text': ''
+                };
+            }, 2000);
+
             this.trigger('updatedDataButton',  this.data, $(this.$el).find(`.${CLASSES.updateText}`).val());
         });
     }
@@ -76,19 +97,17 @@ export class ButtonMenu extends Component {
                         'onClick': () => console.log('dropdownMenu clicked')
                     }
                 }).render();
-            } 
-            
-            return '';
+            } else {
+                return '';
+            }
         };
 
         return html`        
             <p class="${CLASSES.item}">${this.data.text} ${this.data.subItems.length ? `<a class="${CLASSES.seeMore}">(+)</a>` : ''}</p>
-            <input type="button" class="${CLASSES.removeButton}" value="borrar" />
-            <input type="button" class="${CLASSES.updateButton}" value="modificar" />
+            <input type="button" class="${CLASSES.removeButton}" data-value="borrar" />
+            <input type="button" class="${CLASSES.updateButton}" data-value="modificar" />
             <input type="text" placeholder="texto item a modificar" class="${CLASSES.updateText}" />              
             $${dropdownMenu()}
         `;
     }
 }
-
-
