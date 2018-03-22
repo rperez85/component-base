@@ -18,6 +18,7 @@ Ejemplo de uso de un componente base del que extienden las clases de es6 y cuya 
 - Ciclo de vida de los componentes
 - Manejo de estados
 - Propagación de eventos desde el hijo
+- Virtual Dom
 
 
 
@@ -65,7 +66,7 @@ get template() {
 
 
 ## Reactividad
-Al cambiar o añadir alguna propiedad nueva al data, el componente se renderiza automáticamente:
+Al cambiar o añadir alguna propiedad nueva al data, el componente se renderiza automáticamente. El virtual dom hace que solamente se actualicen aquellos nodos de html que hayan cambiado sin mutar el resto.
 ```javascript
 //...
 app.addData({
