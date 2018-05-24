@@ -107,11 +107,7 @@ export class Component {
     }
 
     _addComponentEmittedModelDataBinding(component, arrDataBindingComponents) {
-        Function.prototype.getName = function(){           
-            return /function ([^(]*)/.exec( this+"" )[1];
-        };
-
-        if (component.getName() === 'emittedModelDataBinding') {
+        if (component.name === 'emittedModelDataBinding') {
             arrDataBindingComponents.push(this);            
         }
     }
