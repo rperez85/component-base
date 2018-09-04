@@ -1,14 +1,20 @@
 import * as vdom from './virtual-dom.js';
 
-const NAME = 'Component';
-const VERSION = '1.0.0';
-
+/**
+ * This is Component.
+ */
 export class Component {
+    /**
+     * creates a instance of Component.
+     * @constructor
+     * @param {props} object - object props.
+     */
     constructor(props) {                
         this.props = Object.freeze({
             destiny: props.destiny,
             data: props.data,
             id: props.id || generateUniqueId(),
+            containerClass: props.containerClass || '',
             updateData: props.updateData || function() {},
             updateState: props.updateState || function() {},
             emittedModelDataBinding: props.emittedModelDataBinding || function() {}, 
@@ -34,37 +40,57 @@ export class Component {
         this.beforeRender(this);  
     }
 
+    /**
+    * @returns {object} data
+    */
     get data() {
         return this._data;
     }
   
+     /**
+     * @param {object} data - this extends of main data and re-render component
+     */
     addData(data) {              
-        this._data = Object.assign({}, this._data, data); 
+        this._data = Object.assign({}, this._data, data);
         vdom.updateElement(document.querySelector('[data-component-id="' + this.props.id + '"]'), vdom.convertToVdom(this.template), vdom.convertToVdom(document.querySelector('[data-component-id="' + this.props.id + '"]').innerHTML));
         this.$el.off();
-        this.$el.find("*").off();
+        this.$el.find('*').off();
         this._delegateEventsAfterRender();  
         this.updateData(this._data, this);
         this.props.updateData(this._data, this);
     }
 	
-
+    /**
+    * @returns {string} destiny
+    */
     get destiny() {
         return this._destiny;
     }
 
+    /**
+     *  @param {string} destiny
+     */
     set destiny(destiny) {
         this._destiny = destiny;
     }
 
+    /**
+     *  @param {object} inlineCss
+     */
     set inlineCss(inlineCss) {
         this._inlineCss = inlineCss;
     }
 
+    /**
+    * @returns {object} componentState
+    */
     get componentState() {
         return componentState;
     }
 
+    /**
+     * @param {object} state - this extends of main state and trigger it
+     */
     set componentState(state) {//saves states of component from child to parent
         this._state = Object.assign({}, state, this._state);
         componentState = Object.assign(this._state, componentState, state);
@@ -72,9 +98,11 @@ export class Component {
         this.props.updateState(componentState, this);
     }
 
+
     get modelDataBinding() {
         return this._modelDataBinding;
     }
+
 
     set modelDataBinding(data) {        
         this._modelDataBinding = Object.assign({}, this._modelDataBinding, data); 
@@ -85,6 +113,9 @@ export class Component {
         }        
     }
 
+    /**
+     * @returns {string} destiny
+     */
     get $destiny() {
         if (!this._destiny) {
             return;
@@ -93,20 +124,26 @@ export class Component {
         return $(this._destiny);
     }
 
+    /**
+     * @returns {object} $el - jquery component element
+     */
     get $el() {
         return $(`[data-component-id="${this.props.id}"]`);
     }
 
+    /**
+    * @emits {remove} Emit a remove event
+    */
     remove() {                
         const removedData = this._data;
-	    
+
         this._data = {};        
         this.$el.remove();        
         this.props.removeComponent(removedData, this._data, this);
         this.removeComponent(removedData, this._data, this);  
     }
 
-    _addComponentEmittedModelDataBinding(component, arrDataBindingComponents) {
+    _addComponentEmittedModelDataBinding(component, arrDataBindingComponents) {       
         if (component.name === 'emittedModelDataBinding') {
             arrDataBindingComponents.push(this);            
         }
@@ -145,7 +182,7 @@ export class Component {
     }
 
     _checkIfTemplateExists() {
-        if (!this.template || this.template === '') {
+        if (typeof Object.getOwnPropertyDescriptor(Object.getPrototypeOf(this), 'template') === 'undefined') {
             throw Error(`the template hasn´t been defined.`);            
         }
     }
@@ -166,11 +203,13 @@ export class Component {
   
     render() {     
         this._checkIfTemplateExists();
-        
+
         if (this._destiny) {            
-            this._checkIfDestinyExistsInDom();            
-            this.$destiny.html(`<div data-component-id="${this.props.id}"></div>`);
+            this._checkIfDestinyExistsInDom();
+            
+            this.$destiny.html(`<div data-component-id="${this.props.id}" ${this.props.containerClass ? `class="${this.props.containerClass}"` : ''}></div>`);
             vdom.updateElement(document.querySelector('[data-component-id="' + this.props.id + '"]'), vdom.convertToVdom(`${this.template}`));
+
             this._delegateEventsAfterRender();              
             resolveAppendComponent();            
             
@@ -178,8 +217,8 @@ export class Component {
         } 
         
         awaitForResolveAppendComponent().then(this._delegateEventsAfterRender.bind(this));
-
-        return `<div data-component-id="${this.props.id}">${this.template}</div>`; 
+        
+        return `<div data-component-id="${this.props.id}" ${this.props.containerClass ? `class="${this.props.containerClass}"` : ''}>${this.template}</div>`; 
     }
 }
 
