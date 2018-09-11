@@ -9,35 +9,35 @@ export class Component {
      * @constructor
      * @param {props} object - object props.
      */
-    constructor(props) {                
+    constructor(props) {
         this.props = Object.freeze({
             destiny: props.destiny,
             data: props.data,
             id: props.id || generateUniqueId(),
             containerClass: props.containerClass || '',
-            updateData: props.updateData || function() {},
-            updateState: props.updateState || function() {},
-            emittedModelDataBinding: props.emittedModelDataBinding || function() {}, 
-            beforeRender: props.beforeRender || function() {},
-            afterRender: props.afterRender || function() {},
-            removeComponent: props.removeComponent || function() {},
+            updateData: props.updateData || function () { },
+            updateState: props.updateState || function () { },
+            emittedModelDataBinding: props.emittedModelDataBinding || function () { },
+            beforeRender: props.beforeRender || function () { },
+            afterRender: props.afterRender || function () { },
+            removeComponent: props.removeComponent || function () { },
             inlineCss: props.inlineCss || {},
             methods: {
-                onClick: props.methods && props.methods.onClick ? props.methods.onClick : function() {},
-                onMouseOver: props.methods && props.methods.onMouseOver ? props.methods.onMouseOver : function() {},
-                onKeyPress: props.methods && props.methods.onKeyPress ? props.methods.onKeyPress : function() {}
-            }            
+                onClick: props.methods && props.methods.onClick ? props.methods.onClick : function () { },
+                onMouseOver: props.methods && props.methods.onMouseOver ? props.methods.onMouseOver : function () { },
+                onKeyPress: props.methods && props.methods.onKeyPress ? props.methods.onKeyPress : function () { }
+            }
         });
-           
-        this._data = Object.assign({}, this.props.data, {});         
+
+        this._data = Object.assign({}, this.props.data, {});
         this._state = {};
         this._modelDataBinding = {};
-        this._destiny = this.props.destiny;        
-        this._inlineCss = this.props.inlineCss;    
+        this._destiny = this.props.destiny;
+        this._inlineCss = this.props.inlineCss;
         this._addComponentEmittedModelDataBinding(this.props.emittedModelDataBinding, componentsWithModelDataBinding);
-        
+
         this.props.beforeRender(this);
-        this.beforeRender(this);  
+        this.beforeRender(this);
     }
 
     /**
@@ -46,20 +46,20 @@ export class Component {
     get data() {
         return this._data;
     }
-  
-     /**
-     * @param {object} data - this extends of main data and re-render component
-     */
-    addData(data) {              
+
+    /**
+    * @param {object} data - this extends of main data and re-render component
+    */
+    addData(data) {
         this._data = Object.assign({}, this._data, data);
         vdom.updateElement(document.querySelector('[data-component-id="' + this.props.id + '"]'), vdom.convertToVdom(this.template), vdom.convertToVdom(document.querySelector('[data-component-id="' + this.props.id + '"]').innerHTML));
         this.$el.off();
         this.$el.find('*').off();
-        this._delegateEventsAfterRender();  
+        this._delegateEventsAfterRender();
         this.updateData(this._data, this);
         this.props.updateData(this._data, this);
     }
-	
+
     /**
     * @returns {string} destiny
     */
@@ -104,13 +104,13 @@ export class Component {
     }
 
 
-    set modelDataBinding(data) {        
-        this._modelDataBinding = Object.assign({}, this._modelDataBinding, data); 
+    set modelDataBinding(data) {
+        this._modelDataBinding = Object.assign({}, this._modelDataBinding, data);
 
         for (const component of componentsWithModelDataBinding) {
             component.props.emittedModelDataBinding(this._modelDataBinding, component, this);
             component.emittedModelDataBinding(this._modelDataBinding, component, this);
-        }        
+        }
     }
 
     /**
@@ -134,33 +134,33 @@ export class Component {
     /**
     * @emits {remove} Emit a remove event
     */
-    remove() {                
+    remove() {
         const removedData = this._data;
 
-        this._data = {};        
-        this.$el.remove();        
+        this._data = {};
+        this.$el.remove();
         this.props.removeComponent(removedData, this._data, this);
-        this.removeComponent(removedData, this._data, this);  
+        this.removeComponent(removedData, this._data, this);
     }
 
-    _addComponentEmittedModelDataBinding(component, arrDataBindingComponents) {       
+    _addComponentEmittedModelDataBinding(component, arrDataBindingComponents) {
         if (component.name === 'emittedModelDataBinding') {
-            arrDataBindingComponents.push(this);            
+            arrDataBindingComponents.push(this);
         }
     }
 
-    _nativeMethods() {              
+    _nativeMethods() {
         $(this.$el).on('click', (ev) => this.props.methods.onClick(ev, this._data));
         $(this.$el).on('mouseover', (ev) => this.props.methods.onMouseOver(ev, this._data));
         $(this.$el).on('keypress', (ev) => this.props.methods.onKeyPress(ev, this._data));
     }
 
-    _applyInlineCss() {        
+    _applyInlineCss() {
         if (!this._inlineCss) {
             return;
         }
 
-        this.$el.css(this._inlineCss)    
+        this.$el.css(this._inlineCss)
     }
 
     _delegateEventsAfterRender() {
@@ -169,56 +169,48 @@ export class Component {
         }
 
         this._applyInlineCss();
-        this._nativeMethods();    
-        this.events();        
+        this._nativeMethods();
+        this.events();
         this.afterRender(this._data, this);
-        this.props.afterRender(this._data, this);   
+        this.props.afterRender(this._data, this);
     }
 
     _checkIfDestinyExistsInDom() {
         if (this.$destiny.length === 0) {
-            throw Error(`destiny ${this._destiny} for component ${this.props.id} doesn´t exist in dom.`);            
+            throw Error(`destiny ${this._destiny} for component ${this.props.id} doesn´t exist in dom.`);
         }
     }
 
-    _checkIfTemplateExists() {
-        if (typeof Object.getOwnPropertyDescriptor(Object.getPrototypeOf(this), 'template') === 'undefined') {
-            throw Error(`the template hasn´t been defined.`);            
-        }
-    }
+    events() { }
 
-    events() {}
+    removeComponent() { }
 
-    removeComponent() {}
-    
-    beforeRender() {}
+    beforeRender() { }
 
-    afterRender() {}
+    afterRender() { }
 
-    updateData() {}
+    updateData() { }
 
-    updateState() {}
+    updateState() { }
 
-    emittedModelDataBinding() {}
-  
-    render() {     
-        this._checkIfTemplateExists();
+    emittedModelDataBinding() { }
 
-        if (this._destiny) {            
+    render() {        
+        if (this._destiny) {
             this._checkIfDestinyExistsInDom();
-            
+
             this.$destiny.html(`<div data-component-id="${this.props.id}" ${this.props.containerClass ? `class="${this.props.containerClass}"` : ''}></div>`);
             vdom.updateElement(document.querySelector('[data-component-id="' + this.props.id + '"]'), vdom.convertToVdom(`${this.template}`));
 
-            this._delegateEventsAfterRender();              
-            resolveAppendComponent();            
-            
+            this._delegateEventsAfterRender();
+            resolveAppendComponent();
+
             return;
-        } 
-        
+        }
+
         awaitForResolveAppendComponent().then(this._delegateEventsAfterRender.bind(this));
-        
-        return `<div data-component-id="${this.props.id}" ${this.props.containerClass ? `class="${this.props.containerClass}"` : ''}>${this.template}</div>`; 
+
+        return `<div data-component-id="${this.props.id}" ${this.props.containerClass ? `class="${this.props.containerClass}"` : ''}>${this.template}</div>`;
     }
 }
 
@@ -228,6 +220,6 @@ const promiseAppendComponent = new Promise(_resolve => {
     resolveAppendComponent = _resolve;
 });
 
-async function awaitForResolveAppendComponent () {
+async function awaitForResolveAppendComponent() {
     return promiseAppendComponent;
 }
