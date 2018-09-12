@@ -50,12 +50,13 @@ export class Component {
     /**
     * @param {object} data - this extends of main data and re-render component
     */
-    addData(data) {
+    addData(data, allowBubblingEvents = true) {
         this._data = Object.assign({}, this._data, data);
-        vdom.updateElement(document.querySelector('[data-component-id="' + this.props.id + '"]'), vdom.convertToVdom(this.template), vdom.convertToVdom(document.querySelector('[data-component-id="' + this.props.id + '"]').innerHTML));
-        this.$el.off();
-        this.$el.find('*').off();
-        this._delegateEventsAfterRender();
+        vdom.updateElement(this.$parentEl, vdom.convertToVdom(this.template), vdom.convertToVdom(this.$parentEl.innerHTML));
+        
+        if (allowBubblingEvents) {
+            this._delegateEventsAfterRender();
+        }
         this.updateData(this._data, this);
         this.props.updateData(this._data, this);
     }
@@ -103,7 +104,6 @@ export class Component {
         return this._modelDataBinding;
     }
 
-
     set modelDataBinding(data) {
         this._modelDataBinding = Object.assign({}, this._modelDataBinding, data);
 
@@ -121,24 +121,34 @@ export class Component {
             return;
         }
 
-        return $(this._destiny);
+        return document.querySelector(this._destiny);
     }
 
     /**
-     * @returns {object} $el - jquery component element
+     * @returns {object} $el - collection elements
      */
-    get $el() {
-        return $(`[data-component-id="${this.props.id}"]`);
+    get $el() {        
+        return document.querySelectorAll(`[data-component-id="${this.props.id}"]`);
+    }
+
+     /**
+     * @returns {object} $el - parent element
+     */
+    get $parentEl() {
+        return document.querySelector('[data-component-id="' + this.props.id + '"]');
     }
 
     /**
     * @emits {remove} Emit a remove event
     */
     remove() {
-        const removedData = this._data;
-
+        const removedData = this._data;        
         this._data = {};
-        this.$el.remove();
+        
+        for (var $els of this.$el) {
+            $els.remove();
+        }
+
         this.props.removeComponent(removedData, this._data, this);
         this.removeComponent(removedData, this._data, this);
     }
@@ -149,10 +159,12 @@ export class Component {
         }
     }
 
-    _nativeMethods() {
-        $(this.$el).on('click', (ev) => this.props.methods.onClick(ev, this._data));
-        $(this.$el).on('mouseover', (ev) => this.props.methods.onMouseOver(ev, this._data));
-        $(this.$el).on('keypress', (ev) => this.props.methods.onKeyPress(ev, this._data));
+    _nativeMethods() {        
+        [].forEach.call(this.$el, ($el) => {
+            $el.addEventListener('click', (ev) => this.props.methods.onClick(ev, this._data));
+            $el.addEventListener('mouseover', (ev) => this.props.methods.onMouseOver(ev, this._data));
+            $el.addEventListener('keypress', (ev) => this.props.methods.onKeyPress(ev, this._data));
+        });
     }
 
     _applyInlineCss() {
@@ -160,7 +172,9 @@ export class Component {
             return;
         }
 
-        this.$el.css(this._inlineCss)
+        for (let style in this._inlineCss) {
+            this.$el.style[style] = this._inlineCss[style];
+        }
     }
 
     _delegateEventsAfterRender() {
@@ -181,6 +195,12 @@ export class Component {
         }
     }
 
+    _checkIfTemplateExists() {
+        if (!this.template || this.template === '') {
+            throw Error(`the template hasn´t been defined.`);
+        }
+    }
+
     events() { }
 
     removeComponent() { }
@@ -195,12 +215,14 @@ export class Component {
 
     emittedModelDataBinding() { }
 
-    render() {        
+    render() {
+        this._checkIfTemplateExists();
+
         if (this._destiny) {
             this._checkIfDestinyExistsInDom();
 
-            this.$destiny.html(`<div data-component-id="${this.props.id}" ${this.props.containerClass ? `class="${this.props.containerClass}"` : ''}></div>`);
-            vdom.updateElement(document.querySelector('[data-component-id="' + this.props.id + '"]'), vdom.convertToVdom(`${this.template}`));
+            this.$destiny.innerHTML = `<div data-component-id="${this.props.id}" ${this.props.containerClass ? `class="${this.props.containerClass}"` : ''}></div>`;
+            vdom.updateElement(this.$parentEl, vdom.convertToVdom(`${this.template}`));
 
             this._delegateEventsAfterRender();
             resolveAppendComponent();
